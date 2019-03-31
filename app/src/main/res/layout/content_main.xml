@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorLightGray"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.mentesnot.easytravel.controllers.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TabHost
+            android:id="@+id/tabhost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnSearch">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primaryBlue" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="15dp">
+
+                        <LinearLayout
+                            android:id="@+id/tab1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+
+                            <Button
+                                android:id="@+id/btnType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/bgrounded"
+                                android:drawableLeft="@drawable/ic_airline_seat_recline_extra_black_24dp"
+                                android:drawablePadding="15dp"
+                                android:fontFamily="sans-serif"
+                                android:padding="15dp"
+                                android:text="Secteur d'activité"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorMediumGray"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btnSousType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/bgrounded"
+                                android:drawableLeft="@drawable/ic_airline_seat_recline_extra_black_24dp"
+                                android:drawablePadding="15dp"
+                                android:fontFamily="sans-serif"
+                                android:padding="15dp"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorMediumGray"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btnBudget"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/bgrounded"
+                                android:drawableLeft="@drawable/ic_person_black_24dp"
+                                android:drawablePadding="15dp"
+                                android:fontFamily="sans-serif"
+                                android:padding="15dp"
+                                android:text="1000 TND"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorMediumGray"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btnPeriode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/bgrounded"
+                                android:drawableLeft="@drawable/ic_person_black_24dp"
+                                android:drawablePadding="15dp"
+                                android:fontFamily="sans-serif"
+                                android:padding="15dp"
+                                android:text="12 Mois"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorMediumGray"
+                                android:textSize="18sp" />
+
+
+                        </LinearLayout>
+
+
+                    </FrameLayout>
+
+                </ScrollView>
+
+
+
+
+            </LinearLayout>
+
+
+        </TabHost>
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primaryBlue"
+            android:fontFamily="sans-serif"
+            android:text="Suivant"
+            android:textAllCaps="false"
+            android:textColor="@color/colorInverted"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>
