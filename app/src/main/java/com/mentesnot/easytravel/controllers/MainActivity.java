@@ -32,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     //add and remove image button controls in the dialog
     private ImageButton imgBtnAdd;
     private ImageButton imgBtnRemove;
-
+    private SeekBar AmountScroll;
     //custom dialog view
     private View dialogLayout;
 
@@ -84,27 +85,23 @@ public class MainActivity extends AppCompatActivity
 
     private Button btnTypeCredit;
     private Button btnSousTypeCredit;
-    private ListView listTypeCredit;
+    private Button btnBudjet;
+    private Button btnPeriode;
     //round trip UI controls
 
 
-    private Button btnRoundDepartureDatePicker;
-    private Button btnRoundReturnDatePicker;
-    private Button btnRoundClass;
-    private Button btnRoundNumTraveller;
+
 
     //search button
     private Button btnSearch;
 
     private int tempOneWaySelectedClassID = 0;
     private int tempRoundSelectedClassID = 0;
-    private String oneWayDepartureDate, roundDepartureDate, roundReturnDate;
+
     private View header;
     private ImageView imgProfile;
     private int clientID;
-    private int tempYear;
-    private int tempMonth;
-    private int tempDay;
+
 
     private boolean isValidOneWayDate = true;
     private boolean isValidRoundDate = true;
@@ -171,7 +168,7 @@ public class MainActivity extends AppCompatActivity
 
         btnTypeCredit = (Button) findViewById(R.id.btnType);
         btnSousTypeCredit = (Button) findViewById(R.id.btnSousType);
-
+        btnBudjet = (Button) findViewById(R.id.btnBudget);
 
         //round trip form
 
@@ -204,22 +201,14 @@ public class MainActivity extends AppCompatActivity
                 SousCreditType().show();//DARG prevoir 2eme dialogue
             }
         });
-        //round trip class selector on click listener
-//        btnRoundClass.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                roundClassPickerDialog().show();
-//            }
-//        });
 
-        // round trip number of traveller on click listener
-//        btnRoundNumTraveller.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                roundNumTravellerDialog().show();
-//            }
-//        });
+        btnBudjet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreditAmount().show();//DARG prevoir 3eme dialogue
+            }
+        });
+
 
         //searches available flights on click
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -231,14 +220,14 @@ public class MainActivity extends AppCompatActivity
                 if (currentTab == 0) {
 
                     if (isValidOneWayInput() && isValidOneWayDate) {
-                        searchOneWayFlight();
+                        //searchOneWayFlight();
 
                     }
 
                 } else if (currentTab == 1) {
 
                     if (isValidRoundInput() && isValidRoundDate) {
-                        searchRoundFlight();
+                        //searchRoundFlight();
                     }
                 }
 
@@ -355,43 +344,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //round class picker dialog
-    public Dialog roundClassPickerDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final CharSequence[] classList = {"Economy", "Business"}; //temp data, should be retrieved from database
-
-
-        builder.setTitle("Select Class")
-                .setSingleChoiceItems(classList, tempRoundSelectedClassID, new DialogInterface
-                        .OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                        tempRoundSelectedClassID = id;
-                        //get selected class here
-                        btnRoundClass.setText(classList[id].toString());
-
-
-                    }
-                })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-
-        btnRoundClass.setText(classList[tempRoundSelectedClassID].toString());
-
-
-        return builder.create();
-    }
     public int Indices = -1;
     //number of travellers dialog (one way)
     public Dialog CreditTypeDialog() {
@@ -530,13 +483,14 @@ public class MainActivity extends AppCompatActivity
 
         return builder.create();
     }
-    //number of travellers dialog (round trip)
-    public Dialog roundNumTravellerDialog() {
 
-        dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog, null);
+    public Dialog CreditAmount() {
+
+
+        dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog_jauges, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Number of travellers")
+        SubCreditCount =0;
+        builder.setTitle("Montant")
                 .setView(dialogLayout)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -550,168 +504,20 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-        imgBtnRemove = (ImageButton) dialogLayout.findViewById(R.id.imgBtnRemove);
-        imgBtnAdd = (ImageButton) dialogLayout.findViewById(R.id.imgBtnAdd);
-        numTraveller = (TextView) dialogLayout.findViewById(R.id.txtNumber);
 
-        imgBtnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                roundTravellerCount++;
-                numTraveller.setText(String.valueOf(roundTravellerCount));
-                btnRoundNumTraveller.setText(String.valueOf(roundTravellerCount) + " Traveller");
-            }
-        });
 
-        imgBtnRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (roundTravellerCount > 1) {
-                    roundTravellerCount--;
-                }
-                numTraveller.setText(String.valueOf(roundTravellerCount));
-                btnRoundNumTraveller.setText(String.valueOf(roundTravellerCount) + " Traveller");
-            }
-        });
+        AmountScroll = (SeekBar) dialogLayout.findViewById(R.id.seekBar);
 
-        numTraveller.setText(String.valueOf(roundTravellerCount));
+
+
+
+
+
+
 
         return builder.create();
     }
 
-
-    public DatePickerDialog datePickerDialog(int datePickerId) {
-
-
-        return null;
-    }
-
-    public DatePickerDialog.OnDateSetListener getOneWayDepartureDatePickerListener() {
-        return new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int startYear, int startMonth, int startDay) {
-
-                //get one way departure date here
-
-                oneWayDepartureDate = startYear + "-" + (startMonth + 1) + "-" + startDay;
-
-
-            }
-        };
-    }
-
-    public DatePickerDialog.OnDateSetListener getRoundDepartureDatePickerListener() {
-        return new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int startYear, int startMonth, int startDay) {
-
-                tempYear = startYear;
-                tempMonth = startMonth;
-                tempDay = startDay;
-
-                //get round trip departure date here
-                roundDepartureDate = startYear + "-" + (startMonth + 1) + "-" + startDay;
-                btnRoundDepartureDatePicker.setText(HelperUtilities.formatDate(startYear, startMonth, startDay));
-            }
-        };
-    }
-
-    public DatePickerDialog.OnDateSetListener getRoundReturnDatePickerListener() {
-        return new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int startYear, int startMonth, int startDay) {
-
-                String departureDate = tempYear + "-" + (tempMonth + 1) + "-" + tempDay;
-                String returnDate = startYear + "-" + (startMonth + 1) + "-" + startDay;
-
-                if (HelperUtilities.compareDate(departureDate, returnDate)) {
-                    datePickerAlert().show();
-                    isValidRoundDate = false;
-                } else {
-                    isValidRoundDate = true;
-                    //get round trip return date here
-                    roundReturnDate = startYear + "-" + (startMonth + 1) + "-" + startDay;
-                    btnRoundReturnDatePicker.setText(HelperUtilities.formatDate(startYear, startMonth, startDay));
-                }
-            }
-        };
-    }
-
-    public Dialog datePickerAlert() {
-        return new AlertDialog.Builder(this)
-                .setMessage("Please select a valid return date. The return date cannot be before the departure date.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-    }
-
-    public Dialog datePickerOneAlert() {
-        return new AlertDialog.Builder(this)
-                .setMessage("Please select a departure date.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-    }
-
-    public Dialog datePickerTwoAlert() {
-        return new AlertDialog.Builder(this)
-                .setMessage("Please select a return date.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-    }
-
-
-    public void searchOneWayFlight() {
-
-        intent = new Intent(getApplicationContext(), OneWayFlightListActivity.class);
-
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        getApplicationContext().getSharedPreferences("PREFS", 0).edit().clear().commit();
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
-        editor.putInt("CURRENT_TAB", currentTab);
-        //editor.putString("ORIGIN", HelperUtilities.filter(txtOneWayFrom.getText().toString().trim()));
-        //editor.putString("DESTINATION", HelperUtilities.filter(txtOneWayTo.getText().toString().trim()));
-        editor.putString("DEPARTURE_DATE", oneWayDepartureDate);
-       // editor.putString("FLIGHT_CLASS", btnOneWayClass.getText().toString());
-        editor.putInt("ONEWAY_NUM_TRAVELLER", CreditCount);
-
-        editor.commit();
-
-        startActivity(intent);
-
-
-    }
-
-    public void searchRoundFlight() {
-        intent = new Intent(getApplicationContext(), OutboundFlightListActivity.class);
-
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        getApplicationContext().getSharedPreferences("PREFS", 0).edit().clear().commit();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putInt("CURRENT_TAB", currentTab);
-        //editor.putString("ORIGIN", HelperUtilities.filter(txtRoundFrom.getText().toString().trim()));
-        //editor.putString("DESTINATION", HelperUtilities.filter(txtRoundTo.getText().toString().trim()));
-        editor.putString("DEPARTURE_DATE", roundDepartureDate);
-        editor.putString("RETURN_DATE", roundReturnDate);
-        //editor.putString("FLIGHT_CLASS", btnOneWayClass.getText().toString());
-        editor.putInt("ROUND_NUM_TRAVELLER", roundTravellerCount);
-
-
-        editor.commit();
-
-        startActivity(intent);
-    }
 
     public void drawerProfileInfo() {
         try {
@@ -812,15 +618,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        if (btnRoundDepartureDatePicker.getText().toString().equalsIgnoreCase("departure date")) {
-            datePickerOneAlert().show();
-            return false;
-        }
 
-        if (btnRoundReturnDatePicker.getText().toString().equalsIgnoreCase("return date")) {
-            datePickerTwoAlert().show();
-            return false;
-        }
         return true;
 
     }
