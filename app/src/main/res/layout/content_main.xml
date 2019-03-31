@@ -66,6 +66,11 @@
                                 android:textColor="@color/colorMediumGray"
                                 android:textSize="18sp" />
 
+                            <ListView
+                                android:id="@+id/listTypeCredit_dynamic"
+                                android:layout_width="match_parent"
+                                android:layout_height="3dp" />
+
                             <Button
                                 android:id="@+id/btnSousType"
                                 android:layout_width="match_parent"

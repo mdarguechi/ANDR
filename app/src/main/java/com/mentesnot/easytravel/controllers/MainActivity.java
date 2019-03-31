@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity
     private int day;
 
     //traveller count
-    private int oneWayTravellerCount = 1;
+    private int CreditCount = 0;
+    private int SubCreditCount = 0;
     private int roundTravellerCount = 1;
 
     //traveller count view
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     private Button btnTypeCredit;
     private Button btnSousTypeCredit;
+    private ListView listTypeCredit;
     //round trip UI controls
 
 
@@ -192,14 +195,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                oneWayNumTravellerDialog().show();
+                CreditTypeDialog().show();
             }
         });
         btnSousTypeCredit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                oneWayNumTravellerDialog().show();//DARG prevoir 2eme dialogue
+                SousCreditType().show();//DARG prevoir 2eme dialogue
             }
         });
         //round trip class selector on click listener
@@ -390,15 +392,15 @@ public class MainActivity extends AppCompatActivity
 
         return builder.create();
     }
-
+    public int Indices = -1;
     //number of travellers dialog (one way)
-    public Dialog oneWayNumTravellerDialog() {
+    public Dialog CreditTypeDialog() {
 
 
         dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Number of travellers")
+        builder.setTitle("Type de Crédit :")
                 .setView(dialogLayout)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -415,35 +417,119 @@ public class MainActivity extends AppCompatActivity
         imgBtnRemove = (ImageButton) dialogLayout.findViewById(R.id.imgBtnRemove);
         imgBtnAdd = (ImageButton) dialogLayout.findViewById(R.id.imgBtnAdd);
         numTraveller = (TextView) dialogLayout.findViewById(R.id.txtNumber);
-
+        final String[] TypeCreditStr = {
+                "Intrants agricoles",
+                "moyens de transport",
+                "Elevage (bétail)",
+                "Industries alimentaires",
+                "Marchandises",
+                "Outils et équipements divers"
+        };
         imgBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                oneWayTravellerCount++;
-                numTraveller.setText(String.valueOf(oneWayTravellerCount));
-                btnTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " Credit");
-                btnSousTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " S.Credit");
+                CreditCount++;
+                if (CreditCount > TypeCreditStr.length-1)
+                {
+                    CreditCount = 0;
+                }
+                Indices = CreditCount;
+                numTraveller.setText(TypeCreditStr[CreditCount]);
+                btnTypeCredit.setText(TypeCreditStr[CreditCount]);
+               // btnSousTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " S.Credit");
             }
         });
 
         imgBtnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (oneWayTravellerCount > 1) {
-                    oneWayTravellerCount--;
+                CreditCount--;
+                if (CreditCount <0) {
+                    CreditCount = 5;
                 }
-                numTraveller.setText(String.valueOf(oneWayTravellerCount));
-                btnTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " Credit");
-                btnSousTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " S.Credit");
+                Indices = CreditCount;
+                numTraveller.setText(TypeCreditStr[CreditCount]);
+                btnTypeCredit.setText(TypeCreditStr[CreditCount]);
+                //btnSousTypeCredit.setText(String.valueOf(oneWayTravellerCount) + " S.Credit");
             }
         });
 
 
-        numTraveller.setText(String.valueOf(oneWayTravellerCount));
+        numTraveller.setText(TypeCreditStr[CreditCount]);
 
         return builder.create();
     }
+    //number of travellers dialog (one way)
+    public Dialog SousCreditType() {
 
+
+        dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        SubCreditCount =0;
+        builder.setTitle("Cible ")
+                .setView(dialogLayout)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //get number of traveller here
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        if (Indices == -1) {
+            Toast.makeText(this, "Veuillez choisir un secteur d'activité", Toast.LENGTH_SHORT).show();
+            return builder.create();
+
+        }
+
+
+        imgBtnRemove = (ImageButton) dialogLayout.findViewById(R.id.imgBtnRemove);
+        imgBtnAdd = (ImageButton) dialogLayout.findViewById(R.id.imgBtnAdd);
+        final String SousCreditTypeStr[][] = new String[6][];
+        SousCreditTypeStr[0] = new String[] {"engrais","graines et semence","outillage et machinerie"};
+        SousCreditTypeStr[1] = new String[] {"Moyens de transport"};
+        SousCreditTypeStr[2] = new String[] {"bétail","volaille","poisson"};
+        SousCreditTypeStr[3] = new String[] {"Marchandises et équipements"};
+        SousCreditTypeStr[4] = new String[] {"produits alimentaires","produits de consommation","matériels électroniques"};
+        SousCreditTypeStr[5] = new String[] {"Outils et équipements divers"};
+
+        numTraveller = (TextView) dialogLayout.findViewById(R.id.txtNumber);
+
+        imgBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SubCreditCount++;
+                if (SubCreditCount >  SousCreditTypeStr[Indices].length-1)
+                {
+                    SubCreditCount = 0;
+                }
+                numTraveller.setText(SousCreditTypeStr[Indices][SubCreditCount]);
+                btnSousTypeCredit.setText(SousCreditTypeStr[Indices][SubCreditCount]);
+            }
+        });
+
+        imgBtnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SubCreditCount--;
+                if (SubCreditCount <0) {
+                    SubCreditCount = SousCreditTypeStr[Indices].length - 1;
+                }
+                //numTraveller.setText(String.valueOf(oneWayTravellerCount));
+                numTraveller.setText(SousCreditTypeStr[Indices][SubCreditCount]);
+                btnSousTypeCredit.setText(SousCreditTypeStr[Indices][SubCreditCount]);
+            }
+        });
+
+
+        btnSousTypeCredit.setText(SousCreditTypeStr[Indices][SubCreditCount]);
+
+        return builder.create();
+    }
     //number of travellers dialog (round trip)
     public Dialog roundNumTravellerDialog() {
 
@@ -597,7 +683,7 @@ public class MainActivity extends AppCompatActivity
         //editor.putString("DESTINATION", HelperUtilities.filter(txtOneWayTo.getText().toString().trim()));
         editor.putString("DEPARTURE_DATE", oneWayDepartureDate);
        // editor.putString("FLIGHT_CLASS", btnOneWayClass.getText().toString());
-        editor.putInt("ONEWAY_NUM_TRAVELLER", oneWayTravellerCount);
+        editor.putInt("ONEWAY_NUM_TRAVELLER", CreditCount);
 
         editor.commit();
 
