@@ -55,23 +55,16 @@ public class MainActivity extends AppCompatActivity
 
     private int currentTab;
 
-    //date picker dialog
-    private DatePickerDialog datePickerDialog1;
-    private DatePickerDialog datePickerDialog2;
-    private DatePickerDialog datePickerDialog3;
 
-    //current date
-    private int year;
-    private int month;
-    private int day;
+
 
     //traveller count
     private int CreditCount = 0;
     private int SubCreditCount = 0;
-    private int roundTravellerCount = 1;
 
     //traveller count view
     private TextView numTraveller;
+    private TextView budgetDemande;
 
     //add and remove image button controls in the dialog
     private ImageButton imgBtnAdd;
@@ -79,9 +72,6 @@ public class MainActivity extends AppCompatActivity
     private SeekBar AmountScroll;
     //custom dialog view
     private View dialogLayout;
-
-    //one way UI controls
-   //       btnOneWayNumTraveller
 
     private Button btnTypeCredit;
     private Button btnSousTypeCredit;
@@ -96,7 +86,6 @@ public class MainActivity extends AppCompatActivity
     private Button btnSearch;
 
     private int tempOneWaySelectedClassID = 0;
-    private int tempRoundSelectedClassID = 0;
 
     private View header;
     private ImageView imgProfile;
@@ -169,7 +158,7 @@ public class MainActivity extends AppCompatActivity
         btnTypeCredit = (Button) findViewById(R.id.btnType);
         btnSousTypeCredit = (Button) findViewById(R.id.btnSousType);
         btnBudjet = (Button) findViewById(R.id.btnBudget);
-
+        btnPeriode = (Button)  findViewById(R.id.btnPeriode);
         //round trip form
 
 
@@ -177,9 +166,6 @@ public class MainActivity extends AppCompatActivity
         imgProfile = (ImageView) header.findViewById(R.id.imgProfile);
 
 
-        year = HelperUtilities.currentYear();
-        month = HelperUtilities.currentMonth();
-        day = HelperUtilities.currentDay();
 
         drawerProfileInfo();
         loadImage(clientID);
@@ -208,6 +194,12 @@ public class MainActivity extends AppCompatActivity
                 CreditAmount().show();//DARG prevoir 3eme dialogue
             }
         });
+        btnPeriode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreditPeriode().show();//DARG prevoir 3eme dialogue
+            }
+        });
 
 
         //searches available flights on click
@@ -219,23 +211,32 @@ public class MainActivity extends AppCompatActivity
 
                 if (currentTab == 0) {
 
-                    if (isValidOneWayInput() && isValidOneWayDate) {
-                        //searchOneWayFlight();
+                    //if (isValidOneWayInput() && isValidOneWayDate) {
+                        searchOneWayFlight();
 
-                    }
+                   // }
 
-                } else if (currentTab == 1) {
-
-                    if (isValidRoundInput() && isValidRoundDate) {
-                        //searchRoundFlight();
-                    }
                 }
 
             }
         });
 
     }
+    public void searchOneWayFlight() {
 
+        intent = new Intent(getApplicationContext(), OneWayFlightListActivity.class);
+
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        getApplicationContext().getSharedPreferences("PREFS", 0).edit().clear().commit();
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+
+        startActivity(intent);
+
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -487,6 +488,9 @@ public class MainActivity extends AppCompatActivity
     public Dialog CreditAmount() {
 
 
+        //AmountScroll.setMin(1000);
+
+
         dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog_jauges, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         SubCreditCount =0;
@@ -504,12 +508,93 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-
+        budgetDemande = (TextView) dialogLayout.findViewById(R.id.txtBudget);
 
         AmountScroll = (SeekBar) dialogLayout.findViewById(R.id.seekBar);
 
+        AmountScroll.setMax(20000);
+        AmountScroll.incrementProgressBy(100);
+        AmountScroll.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                progress = progress / 100;
+                progress = progress * 100;
+                progressChangedValue = progress;
+
+                budgetDemande.setText(String.valueOf(progressChangedValue));
+                btnBudjet.setText(String.valueOf(progressChangedValue));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                budgetDemande.setText(String.valueOf(progressChangedValue));
+                btnBudjet.setText(String.valueOf(progressChangedValue+" TND"));
+            }
+        });
 
 
+
+
+
+        return builder.create();
+    }
+
+    public Dialog CreditPeriode() {
+
+
+        //AmountScroll.setMin(1000);
+
+
+        dialogLayout = getLayoutInflater().inflate(R.layout.custom_dialog_jauges, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        SubCreditCount =0;
+        builder.setTitle("Periode")
+                .setView(dialogLayout)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //get number of traveller here
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        budgetDemande = (TextView) dialogLayout.findViewById(R.id.txtBudget);
+
+        AmountScroll = (SeekBar) dialogLayout.findViewById(R.id.seekBar);
+
+        AmountScroll.setMax(36);
+        AmountScroll.incrementProgressBy(1);
+        AmountScroll.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                progress = progress / 1;
+                progress = progress * 1;
+                progressChangedValue = progress;
+
+                budgetDemande.setText(String.valueOf(progressChangedValue));
+                btnPeriode.setText(String.valueOf(progressChangedValue));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                budgetDemande.setText(String.valueOf(progressChangedValue));
+                btnPeriode.setText(String.valueOf(progressChangedValue+" Mois"));
+            }
+        });
 
 
 
